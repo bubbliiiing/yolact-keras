@@ -12,7 +12,7 @@ class UpsampleLike(Layer):
     def call(self, inputs, **kwargs):
         source, target = inputs
         target_shape = keras.backend.shape(target)
-        return tf.image.resize_images(source, (target_shape[1], target_shape[2]), tf.image.ResizeMethod.BILINEAR, False)
+        return tf.image.resize_images(source, (target_shape[1], target_shape[2]), tf.image.ResizeMethod.NEAREST_NEIGHBOR)
 
     def compute_output_shape(self, input_shape):
         return (input_shape[0][0],) + input_shape[1][1:3] + (input_shape[0][-1],)
@@ -20,7 +20,7 @@ class UpsampleLike(Layer):
 class Upsample(Layer):
     def call(self, inputs, **kwargs):
         inputs_shape = keras.backend.shape(inputs)
-        return tf.image.resize_images(inputs, (inputs_shape[1] * 2, inputs_shape[2] * 2), tf.image.ResizeMethod.BILINEAR, True)
+        return tf.image.resize_images(inputs, (inputs_shape[1] * 2, inputs_shape[2] * 2), tf.image.ResizeMethod.NEAREST_NEIGHBOR)
 
     def compute_output_shape(self, input_shape):
         return (input_shape[0], input_shape[1] * 2, input_shape[2] * 2, input_shape[-1])
@@ -30,9 +30,9 @@ def FPN(C3,C4,C5):
     P4           = Conv2D(256, kernel_size=1, strides=1, padding='same', name='fpn.lat_layers.1')(C4)
     P3           = Conv2D(256, kernel_size=1, strides=1, padding='same', name='fpn.lat_layers.0')(C3)
 
-    P5_upsampled = UpSampling2D(name='P5_upsampled')(P5)
+    P5_upsampled = UpsampleLike(name='P5_upsampled')([P5, P4])
     P4           = Add(name='P4_merged')([P5_upsampled, P4])
-    P4_upsampled = UpSampling2D(name='P4_upsampled')(P4)
+    P4_upsampled = UpsampleLike(name='P4_upsampled')([P4, P3])
     P3           = Add(name='P3_merged')([P4_upsampled, P3])
 
     P5           = Conv2D(256, kernel_size=3, strides=1, padding='same', name='fpn.pred_layers.2.0', activation='relu')(P5)
@@ -49,7 +49,7 @@ def Protonet(x, num_prototype):
     x = Conv2D(256, (3, 3), padding="same", name='proto_net.proto1.0', activation="relu")(x)
     x = Conv2D(256, (3, 3), padding="same", name='proto_net.proto1.2', activation="relu")(x)
     x = Conv2D(256, (3, 3), padding="same", name='proto_net.proto1.4', activation="relu")(x)
-    x = UpSampling2D()(x)
+    x = Upsample()(x)
     x = Conv2D(256, (3, 3), padding="same", name='proto_net.proto2.0', activation="relu")(x)
     x = Conv2D(num_prototype, (1, 1), padding="same", name='proto_net.proto2.2', activation='relu')(x)
     return x
