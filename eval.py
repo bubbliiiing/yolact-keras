@@ -5,8 +5,8 @@ from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
 from tqdm import tqdm
 
-from utils.utils import get_classes
-from utils.utils_map import Make_json, get_coco_label_map, prep_metrics
+from utils.utils import get_classes, get_coco_label_map
+from utils.utils_map import Make_json, prep_metrics
 from yolact import YOLACT
 
 if __name__ == '__main__':
@@ -21,7 +21,7 @@ if __name__ == '__main__':
     #   评估自己的数据集必须要修改
     #   所需要区分的类别对应的txt文件
     #-------------------------------------------------------#
-    classes_path    = 'model_data/shape_classes.txt'   
+    classes_path    = 'model_data/coco_classes.txt'   
     #-------------------------------------------------------#
     #   获得测试用的图片路径和标签
     #   默认指向根目录下面的datasets/coco文件夹

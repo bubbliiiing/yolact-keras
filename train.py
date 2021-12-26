@@ -7,7 +7,7 @@ from utils.anchors import get_anchors
 from utils.augmentations import Augmentation
 from utils.callbacks import ExponentDecayScheduler, LossHistory
 from utils.dataloader import COCODetection
-from utils.utils import get_classes
+from utils.utils import get_classes, get_coco_label_map
 
 if __name__ == "__main__":
     #------------------------------------#
@@ -123,6 +123,8 @@ if __name__ == "__main__":
     num_train   = len(list(train_coco.imgToAnns.keys()))
     num_val     = len(list(val_coco.imgToAnns.keys()))
 
+    COCO_LABEL_MAP  = get_coco_label_map(train_coco, class_names)
+
     if Freeze_Train:
         for i in range(173):
             model.layers[i].trainable = False
@@ -136,8 +138,8 @@ if __name__ == "__main__":
         epoch_step      = num_train // batch_size
         epoch_step_val  = num_val // batch_size
 
-        train_dataloader    = COCODetection(train_image_path, train_coco, num_classes, anchors, batch_size, Augmentation(input_shape))
-        val_dataloader      = COCODetection(val_image_path, train_coco, num_classes, anchors, batch_size, Augmentation(input_shape))
+        train_dataloader    = COCODetection(train_image_path, train_coco, num_classes, anchors, batch_size, COCO_LABEL_MAP, Augmentation(input_shape))
+        val_dataloader      = COCODetection(val_image_path, train_coco, num_classes, anchors, batch_size, COCO_LABEL_MAP, Augmentation(input_shape))
 
         model.compile(loss={'yolact_Loss': lambda y_true, y_pred: y_pred}, optimizer = keras.optimizers.Adam(lr=lr))
 
@@ -170,8 +172,8 @@ if __name__ == "__main__":
         if epoch_step == 0 or epoch_step_val == 0:
             raise ValueError('数据集过小，无法进行训练，请扩充数据集。')
 
-        train_dataloader    = COCODetection(train_image_path, train_coco, num_classes, anchors, batch_size, Augmentation(input_shape))
-        val_dataloader      = COCODetection(val_image_path, train_coco, num_classes, anchors, batch_size, Augmentation(input_shape))
+        train_dataloader    = COCODetection(train_image_path, train_coco, num_classes, anchors, batch_size, COCO_LABEL_MAP, Augmentation(input_shape))
+        val_dataloader      = COCODetection(val_image_path, train_coco, num_classes, anchors, batch_size, COCO_LABEL_MAP, Augmentation(input_shape))
 
         model.compile(loss={'yolact_Loss': lambda y_true, y_pred: y_pred}, optimizer = keras.optimizers.Adam(lr=lr))
 

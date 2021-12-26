@@ -35,3 +35,16 @@ def preprocess_input(image):
     std     = (58.40, 57.12, 57.38)
     image   = (image - mean)/std
     return image
+
+def get_coco_label_map(coco, class_names):
+    COCO_LABEL_MAP = {}
+
+    coco_cat_index_MAP = {}
+    for index, cat in coco.cats.items():
+        if cat['name'] == '_background_':
+            continue
+        coco_cat_index_MAP[cat['name']] = index
+
+    for index, class_name in enumerate(class_names):
+        COCO_LABEL_MAP[coco_cat_index_MAP[class_name]] = index + 1
+    return COCO_LABEL_MAP

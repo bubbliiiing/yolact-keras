@@ -60,16 +60,3 @@ def prep_metrics(pred_boxes, pred_confs, pred_classes, pred_masks, image_id, mak
         if (pred_boxes[i, 3] - pred_boxes[i, 1]) * (pred_boxes[i, 2] - pred_boxes[i, 0]) > 0:
             make_json.add_bbox(image_id, pred_classes[i], pred_boxes[i, :], pred_confs[i])
             make_json.add_mask(image_id, pred_classes[i], pred_masks[:, :, i], pred_confs[i])
-
-def get_coco_label_map(coco, class_names):
-    COCO_LABEL_MAP = {}
-
-    coco_cat_index_MAP = {}
-    for index, cat in coco.cats.items():
-        if cat['name'] == '_background_':
-            continue
-        coco_cat_index_MAP[cat['name']] = index
-
-    for index, class_name in enumerate(class_names):
-        COCO_LABEL_MAP[coco_cat_index_MAP[class_name]] = index + 1
-    return COCO_LABEL_MAP
