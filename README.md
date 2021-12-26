@@ -44,22 +44,17 @@ train.py的默认参数用于训练shapes数据集，默认指向了根目录下
 首先需要去yolact.py里面修改model_path以及classes_path，这两个参数必须要修改。    
 **model_path指向训练好的权值文件，在logs文件夹里。   
 classes_path指向检测类别所对应的txt。**    
-
 完成修改后就可以运行predict.py进行检测了。运行后输入图片路径即可检测。   
 
 ### b、训练自己的数据集
 1. 数据集的准备  
 **本文使用labelme工具进行标注，标注好的文件有图片文件和json文件，二者均放在before文件夹里，具体格式可参考shapes数据集。**    
 在标注目标时需要注意，同一种类的不同目标需要使用 _ 来隔开。   
-比如想要训练网络检测**三角形和正方形**，当一幅图片存在两个三角形时，一个标记为：   
+比如想要训练网络检测**三角形和正方形**，当一幅图片存在两个三角形时，分别标记为：   
 ```python
 triangle_1
-```
-另一个为：  
-```python
 triangle_2
 ```
-
 2. 数据集的处理  
 修改coco_annotation.py里面的参数。第一次训练可以仅修改classes_path，classes_path用于指向检测类别所对应的txt。    
 训练自己的数据集时，可以自己建立一个cls_classes.txt，里面写自己所需要区分的类别。    
@@ -81,7 +76,6 @@ dog
 首先需要去yolact.py里面修改model_path以及classes_path，这两个参数必须要修改。    
 **model_path指向训练好的权值文件，在logs文件夹里。   
 classes_path指向检测类别所对应的txt。**     
-
 完成修改后就可以运行predict.py进行检测了。运行后输入图片路径即可检测。     
 
 ### c、训练coco数据集
@@ -99,7 +93,6 @@ coco训练集和验证集的标签 http://images.cocodataset.org/annotations/ann
 首先需要去yolact.py里面修改model_path以及classes_path，这两个参数必须要修改。    
 **model_path指向训练好的权值文件，在logs文件夹里。   
 classes_path指向检测类别所对应的txt。**    
-
 完成修改后就可以运行predict.py进行检测了。运行后输入图片路径即可检测。   
 
 ## 预测步骤
