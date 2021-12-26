@@ -88,34 +88,29 @@ class PredictionModule():
 def yolact(input_shape, num_classes, num_mask = 32, train_mode = False):
     inputs          = Input(shape=input_shape)
     #----------------------------#
-    #   获得的C3为69, 69, 512
-    #   获得的C4为35, 35, 1024
-    #   获得的C5为18, 18, 2048
+    #   获得的C3为68, 68, 512
+    #   获得的C4为34, 34, 1024
+    #   获得的C5为17, 17, 2048
     #----------------------------#
     C3, C4, C5      = ResNet50(inputs)
 
     #----------------------------#
-    #   获得的P3为69, 69, 256
-    #   获得的P4为35, 35, 256
-    #   获得的P5为18, 18, 256
+    #   获得的P3为68, 68, 256
+    #   获得的P4为34, 34, 256
+    #   获得的P5为17, 17, 256
     #   获得的P6为9, 9, 256
     #   获得的P7为5, 5, 256
     #----------------------------#
     features        = FPN(C3,C4,C5)
-    #-------------------------------------#
-    #   对P3进行上采样
-    #   获得的pred_proto为138, 138, 32
-    #-------------------------------------#
-    pred_proto      = Protonet(features[0], num_mask)
 
     pred_boxes      = []
     pred_classes    = []
     pred_masks      = []
     #--------------------------------------------#
     #   将5个特征层利用同一个head的预测结果堆叠
-    #   pred_boxes      19248, 4
-    #   pred_classes    19248, 81
-    #   pred_masks      19248, 32
+    #   pred_boxes      18525, 4
+    #   pred_classes    18525, 81
+    #   pred_masks      18525, 32
     #--------------------------------------------#
     predictionmodule = PredictionModule(256, 3, num_classes, num_mask)
     for f_map in features:
@@ -127,6 +122,12 @@ def yolact(input_shape, num_classes, num_mask = 32, train_mode = False):
     pred_classes    = Concatenate(axis = 1)(pred_classes)
     pred_masks      = Concatenate(axis = 1)(pred_masks)
 
+    #-------------------------------------#
+    #   对P3进行上采样
+    #   获得的pred_proto为138, 138, 32
+    #-------------------------------------#
+    pred_proto      = Protonet(features[0], num_mask)
+    
     seg             = Conv2D(num_classes - 1, (1, 1), padding="same", activation='sigmoid', name='semantic_seg_conv')(features[0])
     if not train_mode:
         pred_classes = Softmax(axis = -1, name="softmax")(pred_classes)
