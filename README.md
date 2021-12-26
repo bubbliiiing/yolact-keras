@@ -147,10 +147,10 @@ img/street.jpg
 5. 运行eval.py即可获得评估结果。  
 
 ### b、评估coco的数据集
-1、下载好coco数据集。  
-2、前往eval.py设置classes_path，指向model_data/coco_classes.txt。  
-3、在yolact.py里面修改model_path以及classes_path。**model_path指向coco数据集的权重，在logs文件夹里。classes_path指向model_data/coco_classes.txt。**    
-4、运行eval.py即可获得评估结果。  
+1. 下载好coco数据集。  
+2. 前往eval.py设置classes_path，指向model_data/coco_classes.txt。  
+3. 在yolact.py里面修改model_path以及classes_path。**model_path指向coco数据集的权重，在logs文件夹里。classes_path指向model_data/coco_classes.txt。**    
+4. 运行eval.py即可获得评估结果。  
 
 ## Reference
 https://github.com/feiyuhuahuo/Yolact_minimal   
