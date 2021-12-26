@@ -40,9 +40,11 @@ shapes数据集下载地址如下，该数据集是使用labelme标注的结果�
 train.py的默认参数用于训练shapes数据集，默认指向了根目录下的数据集文件夹，直接运行train.py即可开始训练。   
 
 4. 训练结果预测   
-训练结果预测需要用到两个文件，分别是yolact.py和predict.py。我们首先需要去yolact.py里面修改model_path以及classes_path，这两个参数必须要修改。    
+训练结果预测需要用到两个文件，分别是yolact.py和predict.py。
+首先需要去yolact.py里面修改model_path以及classes_path，这两个参数必须要修改。    
 **model_path指向训练好的权值文件，在logs文件夹里。   
 classes_path指向检测类别所对应的txt。**    
+
 完成修改后就可以运行predict.py进行检测了。运行后输入图片路径即可检测。   
 
 ### b、训练自己的数据集
@@ -59,7 +61,6 @@ triangle_2
 ```
 
 2. 数据集的处理  
-在完成数据集的摆放之后，我们需要利用coco_annotation.py获得训练用的标签文件。    
 修改coco_annotation.py里面的参数。第一次训练可以仅修改classes_path，classes_path用于指向检测类别所对应的txt。    
 训练自己的数据集时，可以自己建立一个cls_classes.txt，里面写自己所需要区分的类别。    
 model_data/cls_classes.txt文件内容为：      
@@ -76,9 +77,11 @@ dog
 修改完classes_path后就可以运行train.py开始训练了，在训练多个epoch后，权值会生成在logs文件夹中。   
 
 4. 训练结果预测  
-训练结果预测需要用到两个文件，分别是yolact.py和predict.py。在yolact.py里面修改model_path以及classes_path。    
-**model_path指向训练好的权值文件，在logs文件夹里。     
+训练结果预测需要用到两个文件，分别是yolact.py和predict.py。
+首先需要去yolact.py里面修改model_path以及classes_path，这两个参数必须要修改。    
+**model_path指向训练好的权值文件，在logs文件夹里。   
 classes_path指向检测类别所对应的txt。**     
+
 完成修改后就可以运行predict.py进行检测了。运行后输入图片路径即可检测。     
 
 ### c、训练coco数据集
@@ -92,9 +95,11 @@ coco训练集和验证集的标签 http://images.cocodataset.org/annotations/ann
 修改train_image_path为训练图片的路径，train_annotation_path为训练图片的标签文件，val_image_path为验证图片的路径，val_annotation_path为验证图片的标签文件。   
 
 3. 训练结果预测  
-训练结果预测需要用到两个文件，分别是yolact.py和predict.py。在yolact.py里面修改model_path以及classes_path。   
+训练结果预测需要用到两个文件，分别是yolact.py和predict.py。
+首先需要去yolact.py里面修改model_path以及classes_path，这两个参数必须要修改。    
 **model_path指向训练好的权值文件，在logs文件夹里。   
-classes_path指向检测类别所对应的txt。**   
+classes_path指向检测类别所对应的txt。**    
+
 完成修改后就可以运行predict.py进行检测了。运行后输入图片路径即可检测。   
 
 ## 预测步骤
@@ -150,16 +155,15 @@ img/street.jpg
 ## 评估步骤 
 ### a、评估自己的数据集
 1. 本文使用coco格式进行评估。    
-2. 如果在训练前已经运行过coco_annotation.py文件，代码会自动将数据集划分成训练集、验证集和测试集。如果想要修改测试集的比例，可以修改coco_annotation.py文件下的trainval_percent。trainval_percent用于指定(训练集+验证集)与测试集的比例，默认情况下 (训练集+验证集):测试集 = 9:1。train_percent用于指定(训练集+验证集)中训练集与验证集的比例，默认情况下 训练集:验证集 = 9:1。
-3. 利用coco_annotation.py划分测试集后，前往eval.py文件修改classes_path，classes_path用于指向检测类别所对应的txt，这个txt和训练时的txt一样。评估自己的数据集必须要修改。  
+2. 如果在训练前已经运行过coco_annotation.py文件，代码会自动将数据集划分成训练集、验证集和测试集。
+3. 如果想要修改测试集的比例，可以修改coco_annotation.py文件下的trainval_percent。trainval_percent用于指定(训练集+验证集)与测试集的比例，默认情况下 (训练集+验证集):测试集 = 9:1。train_percent用于指定(训练集+验证集)中训练集与验证集的比例，默认情况下 训练集:验证集 = 9:1。
 4. 在yolact.py里面修改model_path以及classes_path。**model_path指向训练好的权值文件，在logs文件夹里。classes_path指向检测类别所对应的txt。**    
-5. 运行eval.py即可获得评估结果。  
+5. 前往eval.py文件修改classes_path，classes_path用于指向检测类别所对应的txt，这个txt和训练时的txt一样。评估自己的数据集必须要修改。运行eval.py即可获得评估结果。  
 
 ### b、评估coco的数据集
 1. 下载好coco数据集。  
-2. 前往eval.py设置classes_path，指向model_data/coco_classes.txt。  
-3. 在yolact.py里面修改model_path以及classes_path。**model_path指向coco数据集的权重，在logs文件夹里。classes_path指向model_data/coco_classes.txt。**    
-4. 运行eval.py即可获得评估结果。  
-
+2. 在yolact.py里面修改model_path以及classes_path。**model_path指向coco数据集的权重，在logs文件夹里。classes_path指向model_data/coco_classes.txt。**    
+3. 前往eval.py设置classes_path，指向model_data/coco_classes.txt。修改Image_dir为评估图片的路径，Json_path为评估图片的标签文件。 运行eval.py即可获得评估结果。  
+  
 ## Reference
 https://github.com/feiyuhuahuo/Yolact_minimal   
