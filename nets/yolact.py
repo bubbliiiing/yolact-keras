@@ -124,7 +124,7 @@ def yolact(input_shape, num_classes, num_mask = 32, train_mode = False):
 
     #-------------------------------------#
     #   对P3进行上采样
-    #   获得的pred_proto为138, 138, 32
+    #   获得的pred_proto为136, 136, 32
     #-------------------------------------#
     pred_proto      = Protonet(features[0], num_mask)
     
