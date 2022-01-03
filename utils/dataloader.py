@@ -129,7 +129,7 @@ class COCODetection(Sequence):
 
     def __getitem__(self, index):
         #------------------------------#
-        #   当输入为550, 550时为18525
+        #   当输入为544, 544时为18525
         #------------------------------#
         num_anchors      = np.shape(self.anchors)[0]
 
