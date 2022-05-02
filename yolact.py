@@ -1,5 +1,4 @@
 import colorsys
-import os
 import time
 
 import cv2
@@ -8,7 +7,8 @@ from PIL import Image
 
 from nets.yolact import yolact
 from utils.anchors import get_anchors
-from utils.utils import cvtColor, get_classes, preprocess_input, resize_image
+from utils.utils import (cvtColor, get_classes, preprocess_input, resize_image,
+                         show_config)
 from utils.utils_bbox import BBoxUtility
 
 
@@ -97,6 +97,8 @@ class YOLACT(object):
 
         self.bbox_util = BBoxUtility(self.nms_iou)
         self.generate()
+        
+        show_config(**self._defaults)
 
     #---------------------------------------------------#
     #   载入模型
