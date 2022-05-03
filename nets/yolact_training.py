@@ -31,6 +31,8 @@ import tensorflow as tf
 
 #     return pred * crop_mask
 
+eps = 1e-6
+
 def crop(masks, boxes):
     masks_shape = tf.shape(masks)
     x1, x2 = boxes[:, 0], boxes[:, 2]
@@ -84,7 +86,7 @@ def loss_location(pred_offset, true_offsets, true_classes):
     #------------------------------------------#
     normalizer  = tf.maximum(1, tf.shape(positive_indices)[0])
     normalizer  = tf.cast(normalizer, dtype=tf.float32)
-    loss        = keras.backend.sum(regression_loss) / normalizer
+    loss        = keras.backend.sum(regression_loss) / (normalizer + eps)
     return loss
 
 def loss_ohem_conf(pred_classes, true_classes, negpos_ratio = 3):
@@ -215,7 +217,7 @@ def loss_lincomb_mask(pred_mask_coef, pred_proto, mask_gt, anchor_max_box, ancho
         #   每个先验框各自计算平均值
         #-----------------------------------------------------#
         bbox_center         = map_to_center_form(tf.cast(pos_anchor_box, tf.float32))
-        mask_loss           = tf.reduce_sum(mask_loss, axis=[0, 1]) / bbox_center[:, 2] / bbox_center[:, 3]
+        mask_loss           = tf.reduce_sum(mask_loss, axis=[0, 1]) / (bbox_center[:, 2] + eps) / (bbox_center[:, 3] + eps)
         total_loss          += tf.reduce_sum(mask_loss)
         i = i + 1
         return i, n, total_loss, total_pos
@@ -223,7 +225,7 @@ def loss_lincomb_mask(pred_mask_coef, pred_proto, mask_gt, anchor_max_box, ancho
     i, n, total_loss, total_pos = tf.while_loop(cond, body, [i, n, total_loss, total_pos])
     
     total_pos = tf.maximum(1.0, tf.cast(tf.reduce_sum(total_pos), total_loss.dtype))
-    return total_loss / tf.cast(proto_h, tf.float32) / tf.cast(proto_w, tf.float32) / total_pos
+    return total_loss / (tf.cast(proto_h, tf.float32) + eps) / (tf.cast(proto_w, tf.float32) + eps) / total_pos
 
 def loss_semantic_segmentation(segmentation_p, segment_gt):
     #-----------------------------------------------------#
@@ -239,7 +241,7 @@ def loss_semantic_segmentation(segmentation_p, segment_gt):
     downsampled_masks = tf.cast((downsampled_masks > 0.5), tf.float32)
     
     loss_s = keras.backend.binary_crossentropy(downsampled_masks, segmentation_p)
-    return tf.reduce_sum(loss_s) / mask_h / mask_w / tf.cast(n, tf.float32)
+    return tf.reduce_sum(loss_s) / (mask_h + eps) / (mask_w + eps) / (tf.cast(n, tf.float32) + eps)
 
 def yolact_Loss(args):
     #-----------------------------------------------------------------#
