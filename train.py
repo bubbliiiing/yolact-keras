@@ -286,7 +286,7 @@ if __name__ == "__main__":
             raise ValueError('数据集过小，无法进行训练，请扩充数据集。')
 
         train_dataloader    = COCODetection(train_image_path, train_coco, num_classes, anchors, batch_size, COCO_LABEL_MAP, Augmentation(input_shape))
-        val_dataloader      = COCODetection(val_image_path, train_coco, num_classes, anchors, batch_size, COCO_LABEL_MAP, Augmentation(input_shape))
+        val_dataloader      = COCODetection(val_image_path, val_coco, num_classes, anchors, batch_size, COCO_LABEL_MAP, Augmentation(input_shape))
 
         #-------------------------------------------------------------------------------#
         #   训练参数的设置
